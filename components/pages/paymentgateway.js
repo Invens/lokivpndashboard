@@ -32,7 +32,7 @@ function PaymentGateway() {
     // Fetch Stripe payments
     const fetchStripePayments = async () => {
       try {
-        const response = await axios.get('http://localhost:3002/api/stripe/orders');
+        const response = await axios.get('https://api.lokivpn.com/api/stripe/orders');
         const payments = response.data;
         const successfulPayments = payments.filter(payment => payment.status === 'succeeded');
         const totalAmount = successfulPayments.reduce((sum, payment) => sum + payment.amount_received, 0);
@@ -46,7 +46,7 @@ function PaymentGateway() {
     // Fetch Razorpay payments
     const fetchRazorpayPayments = async () => {
       try {
-        const response = await axios.get('http://localhost:3002/api/razorpay/orders1');
+        const response = await axios.get('https://api.lokivpn.com/api/razorpay/orders1');
         const payments = response.data.items; // Make sure to use response.data.items
         console.log('Razorpay Payments:', payments); // Debug log
 

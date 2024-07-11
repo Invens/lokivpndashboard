@@ -15,11 +15,11 @@ function Users() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:3002/api/users/');
+        const response = await axios.get('https://api.lokivpn.com/api/users/');
         const usersWithSubscriptions = await Promise.all(
           response.data.map(async user => {
             try {
-              const subscriptionResponse = await axios.get(`http://localhost:3002/api/users/${user.UserID}/subscription-details`);
+              const subscriptionResponse = await axios.get(`https://api.lokivpn.com/api/users/${user.UserID}/subscription-details`);
               return { ...user, subscriptionDetails: subscriptionResponse.data };
             } catch (error) {
               return { ...user, subscriptionDetails: null }; // Guest user or error fetching subscription details

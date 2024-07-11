@@ -22,7 +22,7 @@ function Servers() {
     useEffect(() => {
         const fetchServers = async () => {
             try {
-                const response = await axios.get('http://localhost:3002/api/servers');
+                const response = await axios.get('https://api.lokivpn.com/api/servers');
                 setServers(response.data);
             } catch (error) {
                 console.error('Error fetching servers:', error);
@@ -40,14 +40,14 @@ function Servers() {
     const handleAddServer = async () => {
         try {
             if (editingServer) {
-                await axios.put(`http://localhost:3002/api/servers/${editingServer.ServerID}`, formData);
+                await axios.put(`https://api.lokivpn.com/api/servers/${editingServer.ServerID}`, formData);
                 const updatedServers = servers.map((server) =>
                     server.ServerID === editingServer.ServerID ? { ...formData, ServerID: server.ServerID, CreatedAt: server.CreatedAt, UpdatedAt: new Date().toISOString() } : server
                 );
                 setServers(updatedServers);
                 setEditingServer(null);
             } else {
-                const response = await axios.post('http://localhost:3002/api/servers', formData);
+                const response = await axios.post('https://api.lokivpn.com/api/servers', formData);
                 setServers([...servers, { ...response.data, CreatedAt: new Date().toISOString(), UpdatedAt: new Date().toISOString(), UsageCount: 0 }]);
             }
             setShowForm(false);
@@ -76,7 +76,7 @@ function Servers() {
 
     const handleDeleteServer = async (serverID) => {
         try {
-            await axios.delete(`http://localhost:3002/api/servers/${serverID}`);
+            await axios.delete(`https://api.lokivpn.com/api/servers/${serverID}`);
             setServers(servers.filter((server) => server.ServerID !== serverID));
         } catch (error) {
             console.error('Error deleting server:', error);
@@ -87,7 +87,7 @@ function Servers() {
         const server = servers.find((s) => s.ServerID === serverID);
         const updatedStatus = server.Status === 'Active' ? 'Inactive' : 'Active';
         try {
-            await axios.patch(`http://localhost:3002/api/servers/${serverID}`, { Status: updatedStatus });
+            await axios.patch(`https://api.lokivpn.com/api/servers/${serverID}`, { Status: updatedStatus });
             const updatedServers = servers.map((server) =>
                 server.ServerID === serverID ? { ...server, Status: updatedStatus } : server
             );

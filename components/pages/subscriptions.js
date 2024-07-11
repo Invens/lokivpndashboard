@@ -20,7 +20,7 @@ function Subscriptions() {
 
   const fetchSubscriptions = async () => {
     try {
-      const response = await axios.get('http://localhost:3002/api/subscriptions');
+      const response = await axios.get('https://api.lokivpn.com/api/subscriptions');
       setSubscriptions(response.data);
     } catch (error) {
       console.error('Error fetching subscriptions:', error);
@@ -35,9 +35,9 @@ function Subscriptions() {
   const handleAddSubscription = async () => {
     try {
       if (editingSubscription) {
-        await axios.put(`http://localhost:3002/api/subscriptions/${editingSubscription.SubscriptionTypeID}`, formData);
+        await axios.put(`https://api.lokivpn.com/api/subscriptions/${editingSubscription.SubscriptionTypeID}`, formData);
       } else {
-        await axios.post('http://localhost:3002/api/subscriptions', formData);
+        await axios.post('https://api.lokivpn.com/api/subscriptions', formData);
       }
       fetchSubscriptions();
       setEditingSubscription(null);
@@ -61,7 +61,7 @@ function Subscriptions() {
 
   const handleDeleteSubscription = async (SubscriptionTypeID) => {
     try {
-      await axios.delete(`http://localhost:3002/api/subscriptions/${SubscriptionTypeID}`);
+      await axios.delete(`https://api.lokivpn.com/api/subscriptions/${SubscriptionTypeID}`);
       fetchSubscriptions();
     } catch (error) {
       console.error('Error deleting subscription:', error);
@@ -72,7 +72,7 @@ function Subscriptions() {
     try {
       const subscription = subscriptions.find(sub => sub.SubscriptionTypeID === SubscriptionTypeID);
       const updatedStatus = subscription.Status === 'Active' ? 'Inactive' : 'Active';
-      await axios.patch(`http://localhost:3002/api/subscriptions/${SubscriptionTypeID}`, { Status: updatedStatus });
+      await axios.patch(`https://api.lokivpn.com/api/subscriptions/${SubscriptionTypeID}`, { Status: updatedStatus });
       fetchSubscriptions();
     } catch (error) {
       console.error('Error toggling subscription status:', error);
