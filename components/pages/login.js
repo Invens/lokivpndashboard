@@ -9,7 +9,7 @@ function Login({ onLogin }) {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('https://api.lokivpn.com/api/login', { email, password });
+            const response = await axios.post('https://api.lokivpn.com/api/admin/login', { email, password });
             const token = response.data.token;
             localStorage.setItem('token', token);
             onLogin(); // Call the onLogin prop to notify the parent component
