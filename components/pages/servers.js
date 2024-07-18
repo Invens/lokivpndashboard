@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -19,10 +20,12 @@ function Servers() {
     const [filter, setFilter] = useState('All');
     const [editingServer, setEditingServer] = useState(null);
 
+    const token = localStorage.getItem('token');
+    console.log("Stored Token:", token); // Debugging
+
     useEffect(() => {
         const fetchServers = async () => {
             try {
-                const token = localStorage.getItem('token');
                 const response = await axios.get('https://api.lokivpn.com/api/servers', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -33,7 +36,7 @@ function Servers() {
         };
 
         fetchServers();
-    }, []);
+    }, [token]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -42,7 +45,6 @@ function Servers() {
 
     const handleAddServer = async () => {
         try {
-            const token = localStorage.getItem('token');
             if (editingServer) {
                 await axios.put(`https://api.lokivpn.com/api/servers/${editingServer.ServerID}`, formData, {
                     headers: { Authorization: `Bearer ${token}` }
@@ -84,7 +86,6 @@ function Servers() {
 
     const handleDeleteServer = async (serverID) => {
         try {
-            const token = localStorage.getItem('token');
             await axios.delete(`https://api.lokivpn.com/api/servers/${serverID}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -98,7 +99,6 @@ function Servers() {
         const server = servers.find((s) => s.ServerID === serverID);
         const updatedStatus = server.Status === 'Active' ? 'Inactive' : 'Active';
         try {
-            const token = localStorage.getItem('token');
             await axios.patch(`https://api.lokivpn.com/api/servers/${serverID}`, { Status: updatedStatus }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
