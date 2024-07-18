@@ -22,7 +22,10 @@ function Servers() {
     useEffect(() => {
         const fetchServers = async () => {
             try {
-                const response = await axios.get('https://api.lokivpn.com/api/servers');
+                const token = localStorage.getItem('token');
+                const response = await axios.get('https://api.lokivpn.com/api/servers', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 setServers(response.data);
             } catch (error) {
                 console.error('Error fetching servers:', error);
@@ -39,15 +42,20 @@ function Servers() {
 
     const handleAddServer = async () => {
         try {
+            const token = localStorage.getItem('token');
             if (editingServer) {
-                await axios.put(`https://api.lokivpn.com/api/servers/${editingServer.ServerID}`, formData);
+                await axios.put(`https://api.lokivpn.com/api/servers/${editingServer.ServerID}`, formData, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 const updatedServers = servers.map((server) =>
                     server.ServerID === editingServer.ServerID ? { ...formData, ServerID: server.ServerID, CreatedAt: server.CreatedAt, UpdatedAt: new Date().toISOString() } : server
                 );
                 setServers(updatedServers);
                 setEditingServer(null);
             } else {
-                const response = await axios.post('https://api.lokivpn.com/api/servers', formData);
+                const response = await axios.post('https://api.lokivpn.com/api/servers', formData, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 setServers([...servers, { ...response.data, CreatedAt: new Date().toISOString(), UpdatedAt: new Date().toISOString(), UsageCount: 0 }]);
             }
             setShowForm(false);
@@ -76,7 +84,10 @@ function Servers() {
 
     const handleDeleteServer = async (serverID) => {
         try {
-            await axios.delete(`https://api.lokivpn.com/api/servers/${serverID}`);
+            const token = localStorage.getItem('token');
+            await axios.delete(`https://api.lokivpn.com/api/servers/${serverID}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             setServers(servers.filter((server) => server.ServerID !== serverID));
         } catch (error) {
             console.error('Error deleting server:', error);
@@ -87,7 +98,10 @@ function Servers() {
         const server = servers.find((s) => s.ServerID === serverID);
         const updatedStatus = server.Status === 'Active' ? 'Inactive' : 'Active';
         try {
-            await axios.patch(`https://api.lokivpn.com/api/servers/${serverID}`, { Status: updatedStatus });
+            const token = localStorage.getItem('token');
+            await axios.patch(`https://api.lokivpn.com/api/servers/${serverID}`, { Status: updatedStatus }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             const updatedServers = servers.map((server) =>
                 server.ServerID === serverID ? { ...server, Status: updatedStatus } : server
             );
